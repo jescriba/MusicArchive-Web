@@ -1,0 +1,9 @@
+<form method="post" action="/sessions" class="form-signin" id="login">
+  <h2 class="form-signin-heading">Manager Login</h2>
+  <label for="username" class="sr-only">Username</label>
+  <input type="username" class="form-control" name="username" placeholder="username"/>
+  <label for="password" class="sr-only">Password</label>
+  <input type="password" class="form-control" name="password" placeholder="password"/>
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+  <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
+</form>

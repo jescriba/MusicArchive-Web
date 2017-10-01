@@ -1,0 +1,109 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+ html {
+   position: relative;
+   min-height: 100%;
+ }
+
+ body > .container {
+   /* Space for header and footer */
+   padding: 5px 15px 60px 15px;
+ }
+
+ #content {
+   margin: auto;
+   max-width: 40rem;
+   padding: 20px;
+ }
+
+ .btn.btn-primary {
+   margin: 2px;
+   background-color: #FFEEF7;
+   border-color: #FFEEF7;
+   color: #5D00CC;
+   border-radius: 25px;
+ }
+
+ .btn.btn-primary:hover {
+   background-color: #ffcce4;
+   border-color: #ffcce4;
+   color: #5D00CC;
+ }
+
+ .manage-section {
+   margin: 5px;
+ }
+
+ .container {
+   max-width: 46rem;
+   padding-top: 5px;
+ }
+
+ .header {
+   padding-top: 1rem;
+   padding-bottom: 1rem;
+   border-bottom: .05rem solid #e5e5e5;
+   padding: 2px;
+   margin: auto;
+   max-width: 46rem;
+ }
+
+ .float-right {
+   float: right!important;
+ }
+
+ .footer {
+   position: fixed;
+   bottom: 0;
+   width: 100%;
+   /* Set the fixed height of the footer here */
+   height: 60px;
+   line-height: 60px; /* Vertically center the text there */
+   background-color: #FFEEF7;
+ }
+
+ .artist-link {
+   cursor: pointer;
+ }
+
+ .song-link {
+   cursor: pointer;
+ }
+
+ .nav-link {
+   cursor: pointer;
+ }
+
+ .audio-controls {
+   display: inline;
+   cursor: pointer;
+   padding: 10px;
+ }
+
+ .song-details {
+   padding: 10px;
+ }
+
+ .fa.fa-user-circle-o {
+   padding-top: 5px;
+ }
+
+ .form-signin {
+   max-width: 330px;
+   padding: 15px;
+   margin: 0 auto;
+ }
