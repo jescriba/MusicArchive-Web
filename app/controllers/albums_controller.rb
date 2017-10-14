@@ -1,4 +1,5 @@
 class AlbumsController < ApplicationController
+  include AlbumsHelper
   before_action :admin_user, only: [:new, :create, :edit, :update, :destroy]
 
   def index
@@ -31,70 +32,95 @@ class AlbumsController < ApplicationController
   end
 
   def create
-    # TODO
-    album = Album.new(album_params)
+    additional_params = { artist_names: params[:album][:artist_names] }.compact
+    current_params = album_params.merge(additional_params)
+    current_params[:release_date] = release_date_from_params(current_params)
+    artists = artists_from_params(current_params)
+    # Remove params for constructing associations like album_name, artists_names
+    album = Album.new(current_params.slice(:name, :description, :release_date))
+    album.artists << artists
 
     respond_to do |format|
       if album.save
+        files = files_from_params(current_params)
+        create_songs_for_album_from_files(album, files) if files
+        # verify album in songs
+        upload_album(album, files) if files
         format.html { redirect_to album_url(album) and return }
         format.json { render :json => album }
       else
         format.html { flash.now[:danger] = "#{album.errors.messages}"; render :new }
-        format.json { render :json => { :error => "#{album}.errors.messages}" }, :status => 400 }
+        format.html { render :json => { :error => "#{album.errors.messages}" }, :status => 400 }
       end
     end
   end
 
   def edit
-    # @artist = Artist.find(params[:id])
-    #
-    # if @artist
-    #   @description = @artist.description.empty? ? "Description" : @artist.description
-    #
-    #   render :edit
-    # else
-    #   render :status => 404
-    # end
+    redirect_to albums_url and return if params[:id] == "1" # Don't modify Uncategorized
+
+    @album = Album.find(params[:id])
+
+    if @album
+      @album = @album.description.empty? ? "Description" : @album.description
+      @artist_names = ""
+      @album.artists.each { |a| @artist_names += a.name + "." }
+      @release_date = @album.release_date
+
+      render :edit
+    else
+      render :status => 404
+    end
   end
 
   def update
-    # @artist = Artist.find(params[:id])
-    #
-    # respond_to do |format|
-    #   unless @artist
-    #     format.html { render :status => 404 and return }
-    #     format.json { render :json => [], :status => 400 and return }
-    #   end
-    #
-    #   @artist.attributes = artist_params
-    #
-    #   if @artist.save
-    #     format.html { redirect_to artist_url(@artist) }
-    #     format.json { render :json => @artist }
-    #   else
-    #     format.html { flash.now[:danger] = "#{@artist.errors.messages}"; render :edit }
-    #     format.json { render :json => { :error => "#{@artist.errors.messages}" }, :status => 400 }
-    #   end
-    # end
+    # Dont modify Uncategorized
+    @album = Album.find(params[:id]) unless params[:id] == "1"
+
+    respond_to do |format|
+      unless @album
+        format.html { render :status => 404 and return }
+        format.json { render :json => [], :status => 400 and return }
+      end
+
+      additional_params = { artist_names: params[:album][:artist_names] }.compact
+      current_params = album_params.merge(additional_params)
+      current_params[:release_date] = release_date_from_params(current_params)
+      artists = artists_from_params(current_params)
+      # Remove params for constructing associations like album_name, artists_names
+      @album.attributes = current_params.slice(:name, :description, :release_date)
+      @album.artists = artists
+
+      if @album.save
+        files = files_from_params(current_params)
+        update_album({artists: artists, album: @album, files: files}) if files
+        format.html { redirect_to artist_url(@album) }
+        format.json { render :json => @album }
+      else
+        format.html { flash.now[:danger] = "#{@album.errors.messages}"; render :edit }
+        format.json { render :json => { :error => "#{@album.errors.messages}" }, :status => 400 }
+      end
+    end
   end
 
   def destroy
-    # @artist = Artist.find(params[:id])
-    #
-    # respond_to do |format|
-    #   unless @artist
-    #     format.html { render :status => 404 and return }
-    #     format.json { render :json => [], :status => 400 and return }
-    #   end
-    #
-    #   if @artist.destroy
-    #     format.html { redirect_to artists_url(deleting: true) }
-    #     format.json { render :json => @artist }
-    #   else
-    #     format.html { flash.now[:danger] = "#{@artist.errors.messages}"; redirect_to artists_url(deleting: true) }
-    #     format.json { render :json => { :error => "#{@artist.errors.messages}" }, :status => 400 }
-    #   end
-    # end
+    # Dont modify Uncategorized
+    @album = Album.find(params[:id]) unless params[:id] == "1"
+
+    respond_to do |format|
+      unless @album
+        format.html { render :status => 404 and return }
+        format.json { render :json => [], :status => 400 and return }
+      end
+
+      if @album.destroy
+        delete_album(@album)
+        format.html { redirect_to albums_url(deleting: true) }
+        format.json { render :json => @album }
+      else
+        format.html { flash.now[:danger] = "#{@album.errors.messages}"; redirect_to albums_url(deleting: true) }
+        format.json { render :json => { :error => "#{@album.errors.messages}" }, :status => 400 }
+      end
+    end
   end
 
   private

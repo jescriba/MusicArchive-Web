@@ -1,7 +1,8 @@
 class Artist < ApplicationRecord
   has_many :artist_albums
+  has_many :artist_songs
   has_many :albums, :through => :artist_albums
-  has_many :songs, :through => :albums
+  has_many :songs, :through => :artist_songs
 
   validates :name, uniqueness: true, presence: true
 
@@ -10,7 +11,7 @@ class Artist < ApplicationRecord
   private
   def add_to_default_album
     album = Album.first || Album.new(name: "Uncategorized")
+    album.artists << self
     album.save
-    ArtistAlbum.create(artist_id: self.id, album_id: album.id)
   end
 end

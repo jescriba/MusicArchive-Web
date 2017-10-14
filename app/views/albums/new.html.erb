@@ -1,5 +1,5 @@
 <h2 class="form-signin-heading">New Albums</h2>
-<%= form_for :songs, as: :post, url: artists_path do |f| %>
+<%= form_for :album, as: :post, url: albums_path do |f| %>
   <%= f.text_field :name, placeholder: "Name", class: "form-control" %><br/>
   <%= f.text_field :description, placeholder: "Description", class: "form-control" %><br/>
   <p>Artist names comma separated, case sensitive</p>

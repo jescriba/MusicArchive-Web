@@ -22,7 +22,7 @@ class SongsController < ApplicationController
     @song = Song.find(params[:id])
 
     respond_to do |format|
-      if @asong
+      if @song
         format.html { render :show }
         format.json { render :json => @song }
       else
@@ -37,16 +37,23 @@ class SongsController < ApplicationController
   end
 
   def create
-    params[:recorded_date] = recorded_date_from_params(params)
-    album = album_from_params(params)
-    song = Song.new(song_params)
+    additional_params = { artist_names: params[:song][:artist_names],
+                          album_name: params[:song][:album_name],
+                          album_id: params[:album_id] }.compact
+    current_params = song_params.merge(additional_params)
+    current_params[:recorded_date] = recorded_date_from_params(current_params)
+    album = album_from_params(current_params)
+    artists = artists_from_params(current_params)
+    # Remove params for constructing associations like album_name, artists_names
+    song = Song.new(current_params.slice(:name, :description, :recorded_date))
     song.album = album
-    artists = artists_from_params(params)
+    binding.pry
+    song.artists << artists
 
     respond_to do |format|
       if song.save
-        fi = file_from_params(params)
-        upload_song({artists: artists, album: album, song: song, file: fi})
+        fi = file_from_params(current_params)
+        upload_song(song, fi) if fi
         format.html { redirect_to song_url(song) and return }
         format.json { render :json => song }
       else
@@ -57,55 +64,72 @@ class SongsController < ApplicationController
   end
 
   def edit
-    # @artist = Artist.find(params[:id])
-    #
-    # if @artist
-    #   @description = @artist.description.empty? ? "Description" : @artist.description
-    #
-    #   render :edit
-    # else
-    #   render :status => 404
-    # end
+    @song = Song.find(params[:id])
+
+    if @song
+      @description = @song.description.empty? ? "Description" : @song.description
+      @album_name = @song.album.name || "Album Name"
+      @artist_names = ""
+      @song.artists.each { |a| @artist_names += a.name + "." }
+      @recorded_date = @song.recorded_date
+
+      render :edit
+    else
+      render :status => 404
+    end
   end
 
   def update
-    # @artist = Artist.find(params[:id])
-    #
-    # respond_to do |format|
-    #   unless @artist
-    #     format.html { render :status => 404 and return }
-    #     format.json { render :json => [], :status => 400 and return }
-    #   end
-    #
-    #   @artist.attributes = artist_params
-    #
-    #   if @artist.save
-    #     format.html { redirect_to artist_url(@artist) }
-    #     format.json { render :json => @artist }
-    #   else
-    #     format.html { flash.now[:danger] = "#{@artist.errors.messages}"; render :edit }
-    #     format.json { render :json => { :error => "#{@artist.errors.messages}" }, :status => 400 }
-    #   end
-    # end
+    @song = Song.find(params[:id])
+
+    respond_to do |format|
+      unless @song
+        format.html { render :status => 404 and return }
+        format.json { render :json => [], :status => 400 and return }
+      end
+
+      additional_params = { artist_names: params[:song][:artist_names],
+                            album_name: params[:song][:album_name],
+                            album_id: params[:album_id] }.compact
+      current_params = song_params.merge(additional_params)
+      current_params[:recorded_date] = recorded_date_from_params(current_params)
+      album = album_from_params(current_params)
+      artists = artists_from_params(current_params)
+      # Remove params for constructing associations like album_name, artists_names
+      @song.attributes = current_params.slice(:name, :description, :recorded_date)
+      song.album = album
+      song.artists = artists
+
+      if @song.save
+        fi = file_from_params(current_params)
+        update_song({artists: artists, album: album, song: song, file: fi}) if fi
+        format.html { redirect_to artist_url(@song) }
+        format.json { render :json => @song }
+      else
+        format.html { flash.now[:danger] = "#{@song.errors.messages}"; render :edit }
+        format.json { render :json => { :error => "#{@song.errors.messages}" }, :status => 400 }
+      end
+    end
   end
 
   def destroy
-    # @artist = Artist.find(params[:id])
-    #
-    # respond_to do |format|
-    #   unless @artist
-    #     format.html { render :status => 404 and return }
-    #     format.json { render :json => [], :status => 400 and return }
-    #   end
-    #
-    #   if @artist.destroy
-    #     format.html { redirect_to artists_url(deleting: true) }
-    #     format.json { render :json => @artist }
-    #   else
-    #     format.html { flash.now[:danger] = "#{@artist.errors.messages}"; redirect_to artists_url(deleting: true) }
-    #     format.json { render :json => { :error => "#{@artist.errors.messages}" }, :status => 400 }
-    #   end
-    # end
+    @song = Song.find(params[:id])
+
+    respond_to do |format|
+      unless @song
+        format.html { render :status => 404 and return }
+        format.json { render :json => [], :status => 400 and return }
+      end
+
+      if @song.destroy
+        delete_song(@song)
+        format.html { redirect_to songs_url(deleting: true) }
+        format.json { render :json => @song }
+      else
+        format.html { flash.now[:danger] = "#{@song.errors.messages}"; redirect_to songs_url(deleting: true) }
+        format.json { render :json => { :error => "#{@song.errors.messages}" }, :status => 400 }
+      end
+    end
   end
 
     private
