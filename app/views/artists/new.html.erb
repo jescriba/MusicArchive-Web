@@ -1,0 +1,6 @@
+<h2 class="form-signin-heading">New Artist</h2>
+<%= form_for :artist, as: :post, url: artists_path do |f| %>
+  <%= f.text_field :name, placeholder: "Name", class: "form-control" %><br/>
+  <%= f.text_field :description, placeholder: "Description", class: "form-control" %><br/>
+  <%= f.submit "Create", class: "btn btn-lg btn-primary btn-block" %>
+<% end %>

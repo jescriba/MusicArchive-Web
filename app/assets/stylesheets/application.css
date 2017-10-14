@@ -14,96 +14,113 @@
  *= require_self
  */
 
- html {
-   position: relative;
-   min-height: 100%;
- }
+html {
+ position: relative;
+ min-height: 100%;
+}
 
- body > .container {
-   /* Space for header and footer */
-   padding: 5px 15px 60px 15px;
- }
+body > .container {
+ /* Space for header and footer */
+ padding: 5px 15px 60px 15px;
+}
 
- #content {
-   margin: auto;
-   max-width: 40rem;
-   padding: 20px;
- }
+#content {
+ margin: auto;
+ max-width: 330px;
+ padding: 20px;
+}
 
- .btn.btn-primary {
-   margin: 2px;
-   background-color: #FFEEF7;
-   border-color: #FFEEF7;
-   color: #5D00CC;
-   border-radius: 25px;
- }
+.btn.btn-primary {
+ margin: 2px;
+ background-color: #FFEEF7;
+ border-color: #FFEEF7;
+ color: #5D00CC;
+ border-radius: 25px;
+}
 
- .btn.btn-primary:hover {
-   background-color: #ffcce4;
-   border-color: #ffcce4;
-   color: #5D00CC;
- }
+.btn.btn-primary:hover {
+ background-color: #ffcce4;
+ border-color: #ffcce4;
+ color: #5D00CC;
+}
 
- .manage-section {
-   margin: 5px;
- }
+.manage-section {
+ margin: 5px;
+}
 
- .container {
-   max-width: 46rem;
-   padding-top: 5px;
- }
+.container {
+ max-width: 46rem;
+ padding-top: 5px;
+}
 
- .header {
-   padding-top: 1rem;
-   padding-bottom: 1rem;
-   border-bottom: .05rem solid #e5e5e5;
-   padding: 2px;
-   margin: auto;
-   max-width: 46rem;
- }
+.header {
+ padding-top: 1rem;
+ padding-bottom: 1rem;
+ border-bottom: .05rem solid #e5e5e5;
+ padding: 2px;
+ margin: auto;
+ max-width: 46rem;
+}
 
- .float-right {
-   float: right!important;
- }
+.float-right {
+ float: right!important;
+}
 
- .footer {
-   position: fixed;
-   bottom: 0;
-   width: 100%;
-   /* Set the fixed height of the footer here */
-   height: 60px;
-   line-height: 60px; /* Vertically center the text there */
-   background-color: #FFEEF7;
- }
+.footer {
+ position: fixed;
+ bottom: 0;
+ width: 100%;
+ /* Set the fixed height of the footer here */
+ height: 60px;
+ line-height: 60px; /* Vertically center the text there */
+ background-color: #FFEEF7;
+}
 
- .artist-link {
-   cursor: pointer;
- }
+.artist-link {
+ cursor: pointer;
+}
 
- .song-link {
-   cursor: pointer;
- }
+.song-link {
+ cursor: pointer;
+}
 
- .nav-link {
-   cursor: pointer;
- }
+.nav-link {
+ cursor: pointer;
+}
 
- .audio-controls {
-   display: inline;
-   cursor: pointer;
-   padding: 10px;
- }
+.audio-controls {
+ display: inline;
+ cursor: pointer;
+ padding: 10px;
+}
 
- .song-details {
-   padding: 10px;
- }
+.song-details {
+ padding: 10px;
+}
 
- .fa.fa-user-circle-o {
-   padding-top: 5px;
- }
+.fa.fa-user-circle-o {
+ padding-top: 5px;
+}
 
- .form-signin {
-   max-width: 330px;
-   padding: 15px;
-   margin: 0 auto;
- }
+.form-signin {
+ max-width: 330px;
+ padding: 15px;
+ margin: 0 auto;
+}
+
+.list-group-item.list-group-item-action {
+ text-align: center;
+}
+
+.list-group-item.list-group-item-action:hover {
+  background-color: #FFEEF7;
+}
+
+.date-picker {
+  margin: 5px;
+}
+
+.dropzone {
+  margin: 10px;
+  max-width: 300px;
+}

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :sessions, only: [:index, :new, :create, :destroy]
   get 'portal', to: 'session#index'
   get 'login', to: 'sessions#new'
-  delete 'logout', to: 'sessions#destroy'
+  post 'logout', to: 'sessions#destroy'
 
   resources :artists do
     resources :songs

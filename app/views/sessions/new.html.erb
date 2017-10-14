@@ -1,4 +1,4 @@
-<form method="post" action="/sessions" class="form-signin" id="login">
+<!-- <form method="post" action="/sessions" class="form-signin" id="login">
   <h2 class="form-signin-heading">Manager Login</h2>
   <label for="username" class="sr-only">Username</label>
   <input type="username" class="form-control" name="username" placeholder="username"/>
@@ -6,4 +6,11 @@
   <input type="password" class="form-control" name="password" placeholder="password"/>
   <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
   <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
-</form>
+</form> -->
+
+<h2 class="form-signin-heading">Manager Login</h2>
+<%= form_for :session, method: "post", url: "/sessions", class: "form-signin", id: "login" do |f| %>
+  <%= f.text_field :username, placeholder: "Username", class: "form-control" %><br/>
+  <%= f.password_field :password, placeholder: "Password", class: "form-control" %><br/>
+  <%= f.submit "Login", class: "btn btn-lg btn-primary btn-block" %>
+<% end %>

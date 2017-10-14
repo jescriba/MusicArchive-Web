@@ -1,0 +1,14 @@
+<script src='/scripts/dropzone.js' type='text/javascript'></script>
+<h2 class="form-signin-heading">New Song</h2>
+<%= form_for @song do |f| %>
+  <%= f.text_field :name, placeholder: @song.name, class: "form-control" %><br/>
+  <%= f.text_field :description, placeholder: @description, class: "form-control" %><br/>
+  <p>Artist names comma separated, case sensitive</p>
+  <%= f.text_field :artist_names, placeholder: @artist_names, class: "form-control" %><br/>
+  <%= f.text_field :album_name, placeholder: @album_name, class: "form-control" %><br/>
+  <p>Recorded Date<p>
+  <div id="date-picker"><%= f.date_select :recorded_date, class: "form-control", selected: @recorded_date  %><br/></div>
+  <p>New file</p>
+  <%= f.file_field :song, class: "dropzone", id: "drop-songs" %><br/>
+  <div id="date-picker"><%= f.submit "Create", class: "btn btn-lg btn-primary btn-block" %></div>
+<% end %>

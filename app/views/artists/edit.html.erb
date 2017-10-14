@@ -1,0 +1,6 @@
+<h2 class="form-signin-heading">Edit Artist</h2>
+<%= form_for @artist do |f| %>
+  <%= f.text_field :name, placeholder: @artist.name, class: "form-control" %><br/>
+  <%= f.text_field :description, placeholder: @description, class: "form-control" %><br/>
+  <%= f.submit "Update", class: "btn btn-lg btn-primary btn-block" %>
+<% end %>

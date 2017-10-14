@@ -6,15 +6,18 @@ class SessionsController < ApplicationController
   end
 
   def new
+    redirect_to sessions_url and return if session[:id]
+
     render :new
   end
 
   def create
-    binding.pry
-    if username == USERNAME and password == PASSWORD
-      #session[:id] = 0
+    if params[:session][:username] == ENV["USERNAME"] and params[:session][:password] == ENV["PASSWORD"]
+      session[:id] = 0
+      redirect_to sessions_url and return
     else
-      # Todo error banner
+      flash.now[:danger] = 'Invalid username/password'
+      render :new
     end
   end
 

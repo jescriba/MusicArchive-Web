@@ -1,0 +1,24 @@
+<h2>Portal</h2>
+<p>Manage content</p>
+<div class="manage-section">
+  <h5>Songs</h5>
+  <%= link_to 'Create', new_song_url, class: "btn btn-primary", id: "create-song" %>
+  <%= link_to 'Update', songs_url(:editing => true), class: "btn btn-primary", id: "update-song" %>
+  <%= link_to 'Delete', songs_url(:deleting => true), class: "btn btn-primary", id: "delete-song" %>
+</div>
+<div class="manage-section">
+  <h5>Albums</h5>
+  <%= link_to 'Create', new_album_url, class: "btn btn-primary", id: "create-album" %>
+  <%= link_to 'Update', albums_url(:editing => true), class: "btn btn-primary", id: "update-album" %>
+  <%= link_to 'Delete', albums_url(:deleting => true), class: "btn btn-primary", id: "delete-album" %>
+</div>
+<div class="manage-section">
+  <h5>Artists</h5>
+  <%= link_to 'Create', new_artist_url, class: "btn btn-primary", id: "create-artist" %>
+  <%= link_to 'Update', artists_url(:editing => true), class: "btn btn-primary", id: "update-artist" %>
+  <%= link_to 'Delete', artists_url(:deleting => true), class: "btn btn-primary", id: "delete-artist" %>
+</div>
+<form method="post" action="/logout" class="form-signin" id="logout">
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+  <button type="submit" class="btn btn-primary btn-block">Logout</button>
+</form>

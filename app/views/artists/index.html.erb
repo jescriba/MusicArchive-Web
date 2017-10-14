@@ -1,0 +1,18 @@
+<% if @editing %>
+<h1> Select to Edit </h1>
+<% elsif @deleting %>
+<h1> Select to Delete </h1>
+<% end %>
+<div class="list-group">
+  <% @artists.each do |artist| %>
+    <div class="list-group-item list-group-item-action artist-link" id=<%= "#{artist.id}"%>>
+      <% if @editing %>
+        <%= link_to artist.name, edit_artist_url(artist), class: "list-group-item-heading" %>
+      <% elsif @deleting %>
+        <%= link_to artist.name, artist_url(artist), method: 'delete',  class: "list-group-item-heading", data: { confirm: 'Are you sure?'} %>
+      <% else %>
+        <%= link_to artist.name, artist_url(artist), class: "list-group-item-heading" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
