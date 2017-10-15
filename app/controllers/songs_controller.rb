@@ -39,21 +39,24 @@ class SongsController < ApplicationController
   def create
     additional_params = { artist_names: params[:song][:artist_names],
                           album_name: params[:song][:album_name],
-                          album_id: params[:album_id] }.compact
+                          album_id: params[:album_id],
+                          uploaded_file: params[:song][:song],
+                          file_path: params[:song][:file_path],
+                          content_type: content_type_from_params(params) }.compact
     current_params = song_params.merge(additional_params)
     current_params[:recorded_date] = recorded_date_from_params(current_params)
     album = album_from_params(current_params)
     artists = artists_from_params(current_params)
+    content_type = content_type_from_params(params)
+    file = file_from_params(current_params)
     # Remove params for constructing associations like album_name, artists_names
     song = Song.new(current_params.slice(:name, :description, :recorded_date))
     song.album = album
-    binding.pry
     song.artists << artists
 
     respond_to do |format|
       if song.save
-        fi = file_from_params(current_params)
-        upload_song(song, fi) if fi
+        upload_song({ song: song, file: file, content_type: content_type }) if file
         format.html { redirect_to song_url(song) and return }
         format.json { render :json => song }
       else
@@ -86,24 +89,29 @@ class SongsController < ApplicationController
       unless @song
         format.html { render :status => 404 and return }
         format.json { render :json => [], :status => 400 and return }
+        return
       end
 
       additional_params = { artist_names: params[:song][:artist_names],
                             album_name: params[:song][:album_name],
-                            album_id: params[:album_id] }.compact
+                            album_id: params[:album_id],
+                            uploaded_file: params[:song][:song],
+                            file_path: params[:song][:file_path],
+                            content_type: content_type_from_params(params) }.compact
       current_params = song_params.merge(additional_params)
       current_params[:recorded_date] = recorded_date_from_params(current_params)
+      file = file_from_params(current_params)
       album = album_from_params(current_params)
       artists = artists_from_params(current_params)
+      content_type = content_type_from_params(params)
       # Remove params for constructing associations like album_name, artists_names
       @song.attributes = current_params.slice(:name, :description, :recorded_date)
-      song.album = album
-      song.artists = artists
+      @song.album = album if album
+      @song.artists = artists if artists
 
       if @song.save
-        fi = file_from_params(current_params)
-        update_song({artists: artists, album: album, song: song, file: fi}) if fi
-        format.html { redirect_to artist_url(@song) }
+        update_song({ song: @song, file: file, content_type: content_type }) if file
+        format.html { redirect_to song_url(@song) }
         format.json { render :json => @song }
       else
         format.html { flash.now[:danger] = "#{@song.errors.messages}"; render :edit }
@@ -119,6 +127,7 @@ class SongsController < ApplicationController
       unless @song
         format.html { render :status => 404 and return }
         format.json { render :json => [], :status => 400 and return }
+        return
       end
 
       if @song.destroy

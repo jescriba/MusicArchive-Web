@@ -5,6 +5,10 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# File storage with aws
+gem 'aws-sdk'
+# Resque for handling jobs
+gem 'resque', :require => "resque/server"
 # Debug env vars
 gem 'dotenv-rails', groups: [:development, :test]
 # Debugging

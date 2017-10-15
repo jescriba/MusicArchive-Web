@@ -14,18 +14,19 @@ module AlbumsHelper
   end
 
   def files_from_params(params = {})
+    # TODO
     return nil
-    # return unless params[:song]
-    # return File.new(params[:song][:fi_path]) if params[:song][:fi_path]
-    # return nil unless params[:song][:song]
-    # return params[:song][:song].tempfile
+    # return File.new(params[:file_path]) if params[:file_path]
+    # return nil unless params[:uploaded_file]
+    # return params[:uploaded_file].tempfile
   end
 
 
   # artists: artists, album: album, song: song, file: fi
   def upload_album(album, files)
-    s3 = SessionsHelper::S3Client.new()
-    s3.upload({id: song.id, name: song.name, file: files})
+    # TODO
+    # s3 = SessionsHelper::S3Client.new()
+    # s3.upload({id: song.id, name: song.name, file: files})
 
     # Save urls
     # song.url = s3.url
@@ -35,8 +36,9 @@ module AlbumsHelper
 
   # {artists: artists, album: album, song: song, file: fi}
   def update_album(album, files)
-    s3 = SessionsHelper::S3Client.new()
-    s3.update({id: song.id, name: song.name, files: files})
+    # # TODO
+    # s3 = SessionsHelper::S3Client.new()
+    # s3.update({id: song.id, name: song.name, files: files})
 
     # Save urls
     # song.url = s3.url
@@ -45,8 +47,9 @@ module AlbumsHelper
   end
 
   def delete_album(album)
-    s3 = SessionsHelper::S3Client.new()
-    s3.delete({id: song.id, name: song.name, url: song.url})
+    # TODO
+    # s3 = SessionsHelper::S3Client.new()
+    # s3.delete({id: song.id, name: song.name, url: song.url})
   end
 
 end

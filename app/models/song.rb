@@ -4,4 +4,5 @@ class Song < ApplicationRecord
   belongs_to :album
 
   validates :name, uniqueness: true, presence: true
+  validates :artist_songs, :length => { :minimum => 1 }
 end

@@ -28,7 +28,8 @@ module SongsHelper
     albums = Album.find_by album_params unless album_params.empty?
     artists = params[:artists] || artists_from_params(params)
     if artists and albums
-      albums.filter { |album| album.belongs_to?(artists) }
+      binding.pry
+      albums.select { |album| album.belongs_to?(artists) }
     end
 
     # Return a 'Default' Album and ensure it has all the artists
@@ -55,38 +56,39 @@ module SongsHelper
     return Date.parse("#{year}-#{month}-#{day}")
   end
 
+  def content_type_from_params(params)
+    return params[:content_type] if params[:content_type]
+
+    begin
+      tempfile = params[:song][:song]
+      return tempfile.content_type if tempfile
+      return params[:song][:content_type]
+    rescue
+      return nil
+    end
+  end
+
   def file_from_params(params = {})
-    return unless params[:song]
-    return File.new(params[:song][:fi_path]) if params[:song][:fi_path]
-    return nil unless params[:song][:song]
-    return params[:song][:song].tempfile
+    return File.new(params[:file_path]) if params[:file_path]
+    return nil unless params[:uploaded_file]
+    return params[:uploaded_file].tempfile
   end
 
-  # artists: artists, album: album, song: song, file: fi
-  def upload_song(song, fi)
-    s3 = SessionsHelper::S3Client.new()
-    s3.upload({id: song.id, name: song.name, file: fi})
-
-    # Save urls
-    song.url = s3.url
-    song.lossless_url = s3.lossless_url
-    song.save
+  # { song: @song, file: file, content_type: content_type }
+  def upload_song(params = {})
+    return unless params[:song] and params[:file] and params[:content_type]
+    SongsUploadJob.perform_now(params)
   end
 
-  # {artists: artists, album: album, song: song, file: fi}
+  # { song: @song, file: file, content_type: content_type }
   def update_song(song, fi)
-    s3 = SessionsHelper::S3Client.new()
-    s3.update({id: song.id, name: song.name, file: fi})
-
-    # Save urls
-    song.url = s3.url
-    song.lossless_url = s3.lossless_url
-    song.save
+    return unless params[:song] and params[:file] and params[:content_type]
+    SongsUploadJob.perform_now(params)
   end
 
   def delete_song(song)
-    s3 = SessionsHelper::S3Client.new()
-    s3.delete({id: song.id, name: song.name, url: song.url})
+    return unless song
+    SongsDeleteJob.perform_now(song)
   end
 
 end

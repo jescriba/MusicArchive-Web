@@ -32,9 +32,12 @@ class AlbumsController < ApplicationController
   end
 
   def create
-    additional_params = { artist_names: params[:album][:artist_names] }.compact
+    additional_params = { artist_names: params[:album][:artist_names],
+                          tempfiles: params[:album][:album],
+                          file_paths: params[:album][:file_paths] }.compact
     current_params = album_params.merge(additional_params)
     current_params[:release_date] = release_date_from_params(current_params)
+    files = files_from_params(current_params)
     artists = artists_from_params(current_params)
     # Remove params for constructing associations like album_name, artists_names
     album = Album.new(current_params.slice(:name, :description, :release_date))
@@ -42,9 +45,7 @@ class AlbumsController < ApplicationController
 
     respond_to do |format|
       if album.save
-        files = files_from_params(current_params)
         create_songs_for_album_from_files(album, files) if files
-        # verify album in songs
         upload_album(album, files) if files
         format.html { redirect_to album_url(album) and return }
         format.json { render :json => album }
@@ -61,7 +62,7 @@ class AlbumsController < ApplicationController
     @album = Album.find(params[:id])
 
     if @album
-      @album = @album.description.empty? ? "Description" : @album.description
+      @description = @album.description.empty? ? "Description" : @album.description
       @artist_names = ""
       @album.artists.each { |a| @artist_names += a.name + "." }
       @release_date = @album.release_date
@@ -80,20 +81,23 @@ class AlbumsController < ApplicationController
       unless @album
         format.html { render :status => 404 and return }
         format.json { render :json => [], :status => 400 and return }
+        return
       end
 
-      additional_params = { artist_names: params[:album][:artist_names] }.compact
+      additional_params = { artist_names: params[:album][:artist_names],
+                            tempfiles: params[:album][:album],
+                            file_paths: params[:album][:file_paths] }.compact
       current_params = album_params.merge(additional_params)
       current_params[:release_date] = release_date_from_params(current_params)
+      files = files_from_params(current_params)
       artists = artists_from_params(current_params)
       # Remove params for constructing associations like album_name, artists_names
       @album.attributes = current_params.slice(:name, :description, :release_date)
-      @album.artists = artists
+      @album.artists = artists if artists
 
       if @album.save
-        files = files_from_params(current_params)
         update_album({artists: artists, album: @album, files: files}) if files
-        format.html { redirect_to artist_url(@album) }
+        format.html { redirect_to album_url(@album) }
         format.json { render :json => @album }
       else
         format.html { flash.now[:danger] = "#{@album.errors.messages}"; render :edit }
@@ -110,6 +114,7 @@ class AlbumsController < ApplicationController
       unless @album
         format.html { render :status => 404 and return }
         format.json { render :json => [], :status => 400 and return }
+        return
       end
 
       if @album.destroy
