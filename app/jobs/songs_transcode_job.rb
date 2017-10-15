@@ -15,8 +15,6 @@ class SongsTranscodeJob < ApplicationJob
 
     # Use ffmpeg to transcode to V0 mp3
     cmd = "ffmpeg -i #{file.path} -codec:a libmp3lame -qscale:a 0 #{tempfile_path}"
-    puts "ABOUT TO SEND THIS CMD"
-    puts cmd
     `#{cmd}`
 
     # Upload transcoded version to storage
