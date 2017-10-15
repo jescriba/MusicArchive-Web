@@ -42,7 +42,7 @@ class StorageClient
                        :content_disposition => "attachment; filename='#{song.name}#{extension}'")
 
     public_url = s3_object.public_url
-    is_lossless ? @lossless_url = public_url : @lossy_url = public_url
+    is_lossless ? @lossless_url = public_url : @url = public_url
 
     return unless previous_url
 
@@ -53,11 +53,11 @@ class StorageClient
 
   def delete(params = {})
     return unless params[:url]
+    url = params[:url]
+    url.sub!(BASE_URL, "")
 
-    binding.pry
-    url = params[:url].split("/").last
     s3 = Aws::S3::Resource.new
-    obj = s3.bucket(BUCKET).object(resource_name)
+    obj = s3.bucket(BUCKET).object(url)
     obj.delete()
   end
 

@@ -28,7 +28,6 @@ module SongsHelper
     albums = Album.find_by album_params unless album_params.empty?
     artists = params[:artists] || artists_from_params(params)
     if artists and albums
-      binding.pry
       albums.select { |album| album.belongs_to?(artists) }
     end
 
