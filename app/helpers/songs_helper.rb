@@ -80,7 +80,7 @@ module SongsHelper
   end
 
   # { song: @song, file: file, content_type: content_type }
-  def update_song(song, fi)
+  def update_song(params = {})
     return unless params[:song] and params[:file] and params[:content_type]
     SongsUploadJob.perform_now(params)
   end

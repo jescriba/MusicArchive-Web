@@ -14,6 +14,7 @@ module AlbumsHelper
   end
 
   def files_from_params(params = {})
+    binding.pry
     # TODO
     return nil
     # return File.new(params[:file_path]) if params[:file_path]
@@ -24,6 +25,7 @@ module AlbumsHelper
 
   # artists: artists, album: album, song: song, file: fi
   def upload_album(album, files)
+    binding.pry
     # TODO
     # s3 = SessionsHelper::S3Client.new()
     # s3.upload({id: song.id, name: song.name, file: files})
@@ -36,6 +38,7 @@ module AlbumsHelper
 
   # {artists: artists, album: album, song: song, file: fi}
   def update_album(album, files)
+    binding.pry
     # # TODO
     # s3 = SessionsHelper::S3Client.new()
     # s3.update({id: song.id, name: song.name, files: files})
@@ -47,6 +50,7 @@ module AlbumsHelper
   end
 
   def delete_album(album)
+    binding.pry
     # TODO
     # s3 = SessionsHelper::S3Client.new()
     # s3.delete({id: song.id, name: song.name, url: song.url})

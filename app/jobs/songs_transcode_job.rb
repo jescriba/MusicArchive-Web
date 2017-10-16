@@ -11,15 +11,14 @@ class SongsTranscodeJob < ApplicationJob
     raise "Missing file path" unless File.exists? file.path
 
     # Tempfile to write lossy file to
-    tempfile_path = "/app/tmp/temp#{song.id}#{File.extname(file.path)}"
+    tempfile_path = "/app/tmp/temp#{song.id}.mp3"
 
     # Use ffmpeg to transcode to V0 mp3
-    cmd = "ffmpeg -i #{file.path} -codec:a libmp3lame -qscale:a 0 #{tempfile_path}"
-    `#{cmd}`
+    system "ffmpeg", "-loglevel", "quiet", "-i", "#{file.path}", "-codec:a", "libmp3lame", "-qscale:a", "0", "#{tempfile_path}"
 
     # Upload transcoded version to storage
     storage_client = StorageClient.new
-    storage_client.upload({ song: song, file: file, content_type: "audio/mp3" })
+    storage_client.upload({ song: song, file: File.new(tempfile_path), content_type: "audio/mp3" })
 
     # Delete tempfile
     FileUtils.rm(tempfile_path)

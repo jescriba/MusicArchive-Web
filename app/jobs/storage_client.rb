@@ -47,17 +47,17 @@ class StorageClient
     return unless previous_url
 
     # Delete previous version of song in storage
-    params[:url] = public_url
+    params[:url] = previous_url
     delete(params)
   end
 
   def delete(params = {})
     return unless params[:url]
     url = params[:url]
-    url.sub!(BASE_URL, "")
+    resource = url.sub(BASE_URL, "")
 
     s3 = Aws::S3::Resource.new
-    obj = s3.bucket(BUCKET).object(url)
+    obj = s3.bucket(BUCKET).object(resource)
     obj.delete()
   end
 

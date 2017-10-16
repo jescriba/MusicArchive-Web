@@ -8,7 +8,7 @@ class SongsUploadJob < ApplicationJob
     file = params[:file]
     content_type = params[:content_type]
 
-    storage_client = StorageClient.new()
+    storage_client = StorageClient.new
     # S3 client resolves if it's uploading a new resource
     # Or updating an existing one
     storage_client.upload(params)
