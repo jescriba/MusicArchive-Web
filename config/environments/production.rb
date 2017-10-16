@@ -1,4 +1,8 @@
 Rails.application.configure do
+
+  # Resolve heroku issues since secrets.yml isn't checked into git
+  config.secret_key_base = ENV["SECRET_KEY_BASE"]
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
