@@ -30,14 +30,14 @@ module SongsHelper
     if artists and albums
       if albums.class == Album
         albums = nil unless albums.artists == artists
-        binding.pry
+        albums = [].push(albums)
       else
         albums.select { |album| album.artists == artists }
       end
     end
 
     # Return a 'Default' Album and ensure it has all the artists
-    return default_album unless albums
+    return default_album unless albums and albums.first
 
     return albums.first
   end
