@@ -2,6 +2,10 @@
 class StorageClient
   attr_accessor :url, :lossless_url, :resource_name, :content_type
   # Supported Formats
+  @@content_types_for_extensions = {".aif" => "audio/aiff",
+                                    ".wav" => "audio/wav",
+                                    ".flac" => "audio/flac",
+                                    ".mp3" => "audio/mp3"}
   @@lossless_formats = ["audio/x-aiff", "audio/aiff", "audio/x-wav", "audio/wav", "audio/flac"]
   @@lossy_formats = ["audio/mp3", "audio/mpeg"]
   BUCKET = ENV["S3_BUCKET"]
@@ -59,6 +63,10 @@ class StorageClient
     s3 = Aws::S3::Resource.new
     obj = s3.bucket(BUCKET).object(resource)
     obj.delete()
+  end
+
+  def self.content_type_from_extension(ext)
+    return @@content_types_for_extensions[ext]
   end
 
   private

@@ -1,5 +1,6 @@
 class AlbumsController < ApplicationController
   include AlbumsHelper
+  include SongsHelper
   before_action :admin_user, only: [:new, :create, :edit, :update, :destroy]
 
   def index
@@ -33,20 +34,25 @@ class AlbumsController < ApplicationController
 
   def create
     additional_params = { artist_names: params[:album][:artist_names],
-                          tempfiles: params[:album][:album],
+                          uploaded_files: params[:album][:album],
                           file_paths: params[:album][:file_paths] }.compact
     current_params = album_params.merge(additional_params)
     current_params[:release_date] = release_date_from_params(current_params)
     files = files_from_params(current_params)
+    file_names = file_names_from_params(current_params)
     artists = artists_from_params(current_params)
     # Remove params for constructing associations like album_name, artists_names
     album = Album.new(current_params.slice(:name, :description, :release_date))
     album.artists << artists
+    ## Create songs for album if uploaded files exist
+    if files
+      songs = create_songs_from_file_names_and_artists(file_names, artists)
+      album.songs << songs
+    end
 
     respond_to do |format|
       if album.save
-        create_songs_for_album_from_files(album, files) if files
-        upload_album(album, files) if files
+        upload_album({ songs: songs, files: files }) if files
         format.html { redirect_to album_url(album) and return }
         format.json { render :json => album }
       else
@@ -85,18 +91,24 @@ class AlbumsController < ApplicationController
       end
 
       additional_params = { artist_names: params[:album][:artist_names],
-                            tempfiles: params[:album][:album],
+                            uploaded_files: params[:album][:album],
                             file_paths: params[:album][:file_paths] }.compact
       current_params = album_params.merge(additional_params)
       current_params[:release_date] = release_date_from_params(current_params)
       files = files_from_params(current_params)
+      file_names = files_names_from_params(current_params)
       artists = artists_from_params(current_params)
       # Remove params for constructing associations like album_name, artists_names
       @album.attributes = current_params.slice(:name, :description, :release_date)
       @album.artists = artists if artists
+      ## Create songs for album if uploaded files exist
+      if file_names
+        songs = create_songs_from_files_and_artists(file_names, artists)
+        @album.songs << songs
+      end
 
       if @album.save
-        update_album({artists: artists, album: @album, files: files}) if files
+        upload_album({ songs: songs, files: files }) if files
         format.html { redirect_to album_url(@album) }
         format.json { render :json => @album }
       else
@@ -117,8 +129,12 @@ class AlbumsController < ApplicationController
         return
       end
 
+      songs = @album.songs
       if @album.destroy
-        delete_album(@album)
+        # Delete songs from album
+        songs.each do |s|
+          delete_song(s) if s.destroy
+        end
         format.html { redirect_to albums_url(deleting: true) }
         format.json { render :json => @album }
       else

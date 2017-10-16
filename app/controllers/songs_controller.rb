@@ -110,7 +110,7 @@ class SongsController < ApplicationController
       @song.artists = artists if artists
 
       if @song.save
-        update_song({ song: @song, file: file, content_type: content_type }) if file
+        upload_song({ song: @song, file: file, content_type: content_type }) if file
         format.html { redirect_to song_url(@song) }
         format.json { render :json => @song }
       else

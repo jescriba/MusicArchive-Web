@@ -8,6 +8,6 @@
   <p>Release date<p>
   <div id="date-picker"><%= f.date_select :release_date, class: "form-control", selected: @release_date  %><br/></div>
   <p>New files</p>
-  <%= f.file_field :song, class: "dropzone", id: "drop-songs" %><br/>
+  <%= f.file_field :album, multiple: true, class: "dropzone", id: "drop-songs" %><br/>
   <div id="date-picker"><%= f.submit "Create", class: "btn btn-lg btn-primary btn-block" %></div>
 <% end %>

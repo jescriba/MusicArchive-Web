@@ -79,12 +79,6 @@ module SongsHelper
     SongsUploadJob.perform_now(params)
   end
 
-  # { song: @song, file: file, content_type: content_type }
-  def update_song(params = {})
-    return unless params[:song] and params[:file] and params[:content_type]
-    SongsUploadJob.perform_now(params)
-  end
-
   def delete_song(song)
     return unless song
     SongsDeleteJob.perform_now(song)
