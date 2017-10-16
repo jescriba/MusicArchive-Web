@@ -28,7 +28,12 @@ module SongsHelper
     albums = Album.find_by album_params unless album_params.empty?
     artists = params[:artists] || artists_from_params(params)
     if artists and albums
-      albums.select { |album| album.belongs_to?(artists) }
+      if albums.class == Album
+        albums = nil unless albums.artists == artists
+        binding.pry
+      else
+        albums.select { |album| album.artists == artists }
+      end
     end
 
     # Return a 'Default' Album and ensure it has all the artists
