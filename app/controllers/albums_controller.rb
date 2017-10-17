@@ -14,7 +14,7 @@ class AlbumsController < ApplicationController
 
     respond_to do |format|
       format.html { render :index }
-      format.json { render :json => @albums }
+      format.json { render :json => @albums.to_json(include: [:artists, :songs]) }
     end
   end
 
@@ -24,7 +24,7 @@ class AlbumsController < ApplicationController
     respond_to do |format|
       if @album
         format.html { render :show }
-        format.json { render :json => @album }
+        format.json { render :json => @album.to_json(include: [:artists, :songs]) }
       else
         format.html { render :status => 404 }
         format.json { render :json => [], :status => 404 }
@@ -54,7 +54,7 @@ class AlbumsController < ApplicationController
       if album.save
         upload_album({ songs: songs, files: files }) if files
         format.html { redirect_to album_url(album) and return }
-        format.json { render :json => album }
+        format.json { render :json => album.to_json(include: [:artists, :songs]) }
       else
         format.html { flash.now[:danger] = "#{album.errors.messages}"; render :new }
         format.html { render :json => { :error => "#{album.errors.messages}" }, :status => 400 }
@@ -110,7 +110,7 @@ class AlbumsController < ApplicationController
       if @album.save
         upload_album({ songs: songs, files: files }) if files
         format.html { redirect_to album_url(@album) }
-        format.json { render :json => @album }
+        format.json { render :json => @album.to_json(include: [:artists, :songs])}
       else
         format.html { flash.now[:danger] = "#{@album.errors.messages}"; render :edit }
         format.json { render :json => { :error => "#{@album.errors.messages}" }, :status => 400 }
@@ -136,7 +136,7 @@ class AlbumsController < ApplicationController
           delete_song(s) if s.destroy
         end
         format.html { redirect_to albums_url(deleting: true) }
-        format.json { render :json => @album }
+        format.json { render :json => @album.to_json(include: [:artists, :songs]) }
       else
         format.html { flash.now[:danger] = "#{@album.errors.messages}"; redirect_to albums_url(deleting: true) }
         format.json { render :json => { :error => "#{@album.errors.messages}" }, :status => 400 }
