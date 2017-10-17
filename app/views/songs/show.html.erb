@@ -1,6 +1,12 @@
 <div class="container">
   <h1 class="text-center"><%= @song.name %></h1>
   <p class="list-group-item-text">
+    <%= @song.artists.map {|a| a.name}.join ", " %>
+  </p>
+  <p class="list-group-item-text">
     <%= @song.description %>
+  </p>
+  <p class="list-group-item-text">
+    <%= @song.recorded_date %>
   </p>
 </div>

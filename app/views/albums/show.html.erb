@@ -1,6 +1,12 @@
 <div class="container">
   <h1 class="text-center"><%= @album.name %></h1>
   <p class="list-group-item-text">
+    <%= @album.artists.map {|a| a.name}.join ", " %>
+  </p>
+  <p class="list-group-item-text">
     <%= @album.description %>
+  </p>
+  <p class="list-group-item-text">
+    <%= @album.release_date %>
   </p>
 </div>

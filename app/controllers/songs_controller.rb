@@ -4,7 +4,8 @@ class SongsController < ApplicationController
 
   def index
     # # TODO Pagination
-    @songs = Song.all
+    @songs = Song.find_by params.permit(:album_id)
+    @songs = [].push(@songs) if @songs.class == Song
 
     if logged_in?
       @editing = params[:editing]
@@ -144,7 +145,7 @@ class SongsController < ApplicationController
     private
 
     def song_params
-      params.require(:song).permit(:name, :description, :recorded_date)
+      params.require(:song).permit(:name, :description, :recorded_date, :album_id)
     end
 
     def admin_user
