@@ -3,19 +3,23 @@ class SongsUploadJob < ApplicationJob
   @queue = :song_upload
 
   def perform(params)
-    return unless params[:song] and params[:file] and params[:content_type]
+    return unless params[:song] and params[:file_path] and params[:content_type]
     song = params[:song]
-    file = params[:file]
+    file_path = params[:file_path]
     content_type = params[:content_type]
+    file = File.new file_path
 
     storage_client = StorageClient.new
     # S3 client resolves if it's uploading a new resource
     # Or updating an existing one
-    storage_client.upload(params)
+    storage_client.upload({ song: song, content_type: content_type, file: file })
     if storage_client.should_transcode?
       song.lossless_url = storage_client.lossless_url
-      params[:resource_name] = storage_client.resource_name
-      SongsTranscodeJob.perform_now(params)
+      resource_name = storage_client.resource_name
+      SongsTranscodeJob.perform_later({ song: song,
+                                        content_type: content_type,
+                                        file_path: file_path,
+                                        resource_name: resource_name})
       song.save
       return
     end

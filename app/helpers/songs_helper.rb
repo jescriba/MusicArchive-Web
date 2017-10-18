@@ -81,12 +81,17 @@ module SongsHelper
   # { song: @song, file: file, content_type: content_type }
   def upload_song(params = {})
     return unless params[:song] and params[:file] and params[:content_type]
-    SongsUploadJob.perform_now(params)
+    file_path = params[:file_path] || params[:file].path
+    song = params[:song]
+    content_type = params[:content_type]
+    SongsUploadJob.perform_later({song: song, content_type: content_type, file_path: file_path })
   end
 
   def delete_song(song)
     return unless song
-    SongsDeleteJob.perform_now(song)
+    lossless_url = song.lossless_url
+    lossy_url = song.url
+    SongsDeleteJob.perform_later({ lossless_url: lossless_url, lossy_url: lossy_url })
   end
 
 end

@@ -3,18 +3,18 @@ class SongsTranscodeJob < ApplicationJob
   @queue = :song_transcode
 
   def perform(params)
-    return unless params[:song] and params[:file] and params[:content_type] and params[:resource_name]
+    return unless params[:song] and params[:file_path] and params[:content_type] and params[:resource_name]
     song = params[:song]
-    file = params[:file]
+    file_path = params[:file_path]
     content_type = params[:content_type]
 
-    raise "Missing file path" unless File.exists? file.path
+    raise "Missing file path" unless File.exists? file_path
 
     # Tempfile to write lossy file to
     tempfile_path = "/app/tmp/temp#{song.id}.mp3"
 
     # Use ffmpeg to transcode to V0 mp3
-    system "ffmpeg", "-loglevel", "quiet", "-i", "#{file.path}", "-codec:a", "libmp3lame", "-qscale:a", "0", "#{tempfile_path}"
+    system "ffmpeg", "-loglevel", "quiet", "-i", "#{file_path}", "-codec:a", "libmp3lame", "-qscale:a", "0", "#{tempfile_path}"
 
     # Upload transcoded version to storage
     storage_client = StorageClient.new
