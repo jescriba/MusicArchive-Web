@@ -22,6 +22,9 @@ class SongsUploadJob < ApplicationJob
                                         resource_name: resource_name})
       song.save
       return
+    else
+      # Delete temp file
+      FileUtils.rm(file_path)
     end
 
     song.url = storage_client.url

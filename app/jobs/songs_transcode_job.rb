@@ -20,8 +20,9 @@ class SongsTranscodeJob < ApplicationJob
     storage_client = StorageClient.new
     storage_client.upload({ song: song, file: File.new(tempfile_path), content_type: "audio/mp3" })
 
-    # Delete tempfile
-    FileUtils.rm(tempfile_path)
+    # Delete tempfiles
+    FileUtils.rm tempfile_path
+    FileUtils.rm file_path
 
     # Save song with new url
     song.url = storage_client.url
