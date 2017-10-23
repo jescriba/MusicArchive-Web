@@ -11,7 +11,7 @@ class SongsTranscodeJob < ApplicationJob
     raise "Missing file path" unless File.exists? file_path
 
     # Tempfile to write lossy file to
-    tempfile_path = "/app/tmp/temp#{song.id}.mp3"
+    tempfile_path = "/tmp/temp#{song.id}.mp3"
 
     # Use ffmpeg to transcode to V0 mp3
     system "ffmpeg", "-loglevel", "quiet", "-i", "#{file_path}", "-codec:a", "libmp3lame", "-qscale:a", "0", "#{tempfile_path}"

@@ -84,7 +84,7 @@ module SongsHelper
     file_path = params[:file_path] || params[:file].path
     # Copy Tempfile to Separate Tempfile since Heroku won't persist Tempfile from web request
     extension = File.extname file_path
-    tempfile_path = "/app/tmp/#{SecureRandom.uuid}#{extension}"
+    tempfile_path = "/tmp/#{SecureRandom.uuid}#{extension}"
     FileUtils.cp file_path, tempfile_path
     song = params[:song]
     content_type = params[:content_type]
