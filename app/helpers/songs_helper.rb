@@ -82,14 +82,9 @@ module SongsHelper
   def upload_song(params = {})
     return unless params[:song] and params[:file] and params[:content_type]
     file_path = params[:file_path] || params[:file].path
-    # Copy Tempfile to Separate Tempfile since Heroku won't persist Tempfile from web request
-    extension = File.extname file_path
-
-    tempfile_path = Rails.root.join("tmp/#{SecureRandom.uuid}#{extension}").to_s
-    FileUtils.cp file_path, tempfile_path
     song = params[:song]
     content_type = params[:content_type]
-    SongsUploadJob.perform_later({song: song, content_type: content_type, file_path: tempfile_path })
+    SongsUploadJob.perform_now({song: song, content_type: content_type, file_path: file_path })
   end
 
   def delete_song(song)

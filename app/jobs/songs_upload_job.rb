@@ -16,15 +16,9 @@ class SongsUploadJob < ApplicationJob
     if storage_client.should_transcode?
       song.lossless_url = storage_client.lossless_url
       resource_name = storage_client.resource_name
-      SongsTranscodeJob.perform_later({ song: song,
-                                        content_type: content_type,
-                                        file_path: file_path,
-                                        resource_name: resource_name})
+      SongsTranscodeJob.perform_later song
       song.save
       return
-    else
-      # Delete temp file
-      FileUtils.rm(file_path)
     end
 
     song.url = storage_client.url

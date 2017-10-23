@@ -2,19 +2,20 @@ class SongsTranscodeJob < ApplicationJob
   queue_as :default
   @queue = :song_transcode
 
-  def perform(params)
-    return unless params[:song] and params[:file_path] and params[:content_type] and params[:resource_name]
-    song = params[:song]
-    file_path = params[:file_path]
-    content_type = params[:content_type]
+  def perform(song)
+    lossless_url = song.lossless_url
 
-    raise "Missing file path" unless File.exists? file_path
+    # Download resource from s3 since can't predictably write/read to tmp on heroku
+    extension = File.extname(lossless_url)
+    tempfile_lossless_path = "/tmp/#{SecureRandom.uuid}#{extension}"
+    download_cmd_str = "curl -o #{tempfile_lossless_path} #{lossless_url}"
+    download_cmd =  `#{download_cmd_str}`
 
     # Tempfile to write lossy file to
     tempfile_path = "/tmp/temp#{song.id}.mp3"
 
     # Use ffmpeg to transcode to V0 mp3
-    system "ffmpeg", "-loglevel", "quiet", "-i", "#{file_path}", "-codec:a", "libmp3lame", "-qscale:a", "0", "#{tempfile_path}"
+    system "ffmpeg", "-loglevel", "quiet", "-i", "#{tempfile_lossless_path}", "-codec:a", "libmp3lame", "-qscale:a", "0", "#{tempfile_path}"
 
     # Upload transcoded version to storage
     storage_client = StorageClient.new
@@ -22,7 +23,7 @@ class SongsTranscodeJob < ApplicationJob
 
     # Delete tempfiles
     FileUtils.rm tempfile_path
-    FileUtils.rm file_path
+    FileUtils.rm tempfile_lossless_path
 
     # Save song with new url
     song.url = storage_client.url
