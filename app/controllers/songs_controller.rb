@@ -6,9 +6,9 @@ class SongsController < ApplicationController
     # # TODO Pagination
     search_params = params.permit(:album_id)
     if search_params.empty?
-      @songs = Song.all
+      @songs = Song.paginate(page: params[:page])
     else
-      @songs = Song.find_by search_params
+      @songs = Song.find_by(search_params).paginate(page: params[:page])
     end
     @songs = [].push(@songs) if @songs.class == Song
 

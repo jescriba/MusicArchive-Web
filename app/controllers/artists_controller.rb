@@ -3,7 +3,7 @@ class ArtistsController < ApplicationController
 
   def index
     # TODO Pagination
-    @artists = Artist.all
+    @artists = Artist.paginate(page: params[:page])
 
     if logged_in?
       @editing = params[:editing]

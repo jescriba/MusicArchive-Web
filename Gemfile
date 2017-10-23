@@ -5,6 +5,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# Paginate
+gem 'will_paginate'
 # File storage with aws
 gem 'aws-sdk'
 # Resque for handling jobs

@@ -5,7 +5,7 @@ class AlbumsController < ApplicationController
 
   def index
     # TODO Pagination or search params
-    @albums = Album.all
+    @albums = Album.paginate(page: params[:page])
 
     if logged_in?
       @editing = params[:editing]
