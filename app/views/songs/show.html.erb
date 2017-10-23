@@ -9,4 +9,14 @@
   <p class="list-group-item-text">
     <%= @song.recorded_date %>
   </p>
+  <% if @song.lossless_url && !@song.lossless_url.empty? %>
+    <button type="button" class="btn btn-primary" id="lossless-download" song-url="<%= @song.lossless_url %>">
+      Lossless
+    </button>
+  <% end %>
+  <% if @song.url && !@song.url.empty? %>
+    <button type="button" class="btn btn-primary" id="lossy-download" song-url="<%= @song.url %>">
+      Lossy
+    </button>
+  <% end %>
 </div>
