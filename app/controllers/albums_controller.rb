@@ -98,7 +98,7 @@ class AlbumsController < ApplicationController
       current_params = album_params.merge(additional_params)
       current_params[:release_date] = release_date_from_params(current_params)
       files = files_from_params(current_params)
-      file_names = files_names_from_params(current_params)
+      file_names = file_names_from_params(current_params)
       artists = artists_from_params(current_params)
       # Remove params for constructing associations like album_name, artists_names
       @album.attributes = current_params.slice(:name, :description, :release_date)
