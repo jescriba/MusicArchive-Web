@@ -70,7 +70,9 @@ class AlbumsController < ApplicationController
     if @album
       @description = @album.description.empty? ? "Description" : @album.description
       @artist_names = ""
-      @album.artists.each { |a| @artist_names += a.name + "." }
+      @album.artists.each { |a| @artist_names += a.name + "," }
+      # Remove trailing comma
+      @artist_names = @artist_names.chomp ","
       @release_date = @album.release_date
 
       render :edit

@@ -58,11 +58,50 @@ class StorageClient
   def delete(params = {})
     return unless params[:url]
     url = params[:url]
+    # TODO Remove the need to specify a BASE_URL constant
     resource = url.sub(BASE_URL, "")
 
     s3 = Aws::S3::Resource.new
     obj = s3.bucket(BUCKET).object(resource)
     obj.delete()
+  end
+
+  def update_content_disposition(song)
+    name = song.name
+    url = song.url
+    lossless_url = song.lossless_url
+
+    # Update Lossy Resource if any
+    if url
+      resource = url.sub(BASE_URL, "")
+      extension = File.extname(resource)
+      content_type = @@content_types_for_extensions[extension]
+
+      s3 = Aws::S3::Resource.new
+      obj = s3.bucket(BUCKET).object(resource)
+      # Update content-disposition. No easier way??? :(
+      obj.copy_to("#{obj.bucket.name}/#{obj.key}",
+                         :metadata_directive => "REPLACE",
+                         :acl => "public-read",
+                         :content_type => content_type,
+                         :content_disposition => "attachment; filename='#{name}#{extension}'")
+    end
+
+    # Update Lossless Resource if any
+    if lossless_url
+      resource = lossless_url.sub(BASE_URL, "")
+      extension = File.extname(resource)
+      content_type = @@content_types_for_extensions[extension]
+
+      s3 = Aws::S3::Resource.new
+      obj = s3.bucket(BUCKET).object(resource)
+      # Update content-disposition. No easier way??? :(
+      obj.copy_to("#{obj.bucket.name}/#{obj.key}",
+                         :metadata_directive => "REPLACE",
+                         :acl => "public-read",
+                         :content_type => content_type,
+                         :content_disposition => "attachment; filename='#{name}#{extension}'")
+    end
   end
 
   def self.content_type_from_extension(ext)

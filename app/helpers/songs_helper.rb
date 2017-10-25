@@ -10,7 +10,6 @@ module SongsHelper
         a = Artist.find_by name: artist_name
         artists.push(a) if a
       end
-
       return artists
     end
 
@@ -92,6 +91,13 @@ module SongsHelper
     lossless_url = song.lossless_url
     lossy_url = song.url
     SongsDeleteJob.perform_later({ lossless_url: lossless_url, lossy_url: lossy_url })
+  end
+
+  def update_storage_name(params = {})
+    song = params[:song]
+    return unless song
+    client = StorageClient.new
+    client.update_content_disposition(song)
   end
 
 end

@@ -79,7 +79,9 @@ class SongsController < ApplicationController
       @description = @song.description.empty? ? "Description" : @song.description
       @album_name = @song.album.name || "Album Name"
       @artist_names = ""
-      @song.artists.each { |a| @artist_names += a.name + "." }
+      @song.artists.each { |a| @artist_names += a.name + "," }
+      # Remove trailing comma
+      @artist_names = @artist_names.chomp ","
       @recorded_date = @song.recorded_date
 
       render :edit
@@ -106,16 +108,21 @@ class SongsController < ApplicationController
                             content_type: content_type_from_params(params) }.compact
       current_params = song_params.merge(additional_params)
       current_params[:recorded_date] = recorded_date_from_params(current_params)
+      new_name = current_params[:name]
       file = file_from_params(current_params)
       album = album_from_params(current_params)
       artists = artists_from_params(current_params)
       content_type = content_type_from_params(params)
       # Remove params for constructing associations like album_name, artists_names
+      should_update_storage_name = true if !file and @song.name != new_name and new_name
       @song.attributes = current_params.slice(:name, :description, :recorded_date)
       @song.album = album if album
       @song.artists = artists if artists
 
       if @song.save
+        # Update the content-dispoisiton of s3 resource if the name changes
+        # without a  new uploaded file
+        update_storage_name({ song: @song }) if should_update_storage_name
         upload_song({ song: @song, file: file, content_type: content_type }) if file
         format.html { redirect_to song_url(@song) }
         format.json { render :json => @song.to_json(include: [:artists, :album]) }
