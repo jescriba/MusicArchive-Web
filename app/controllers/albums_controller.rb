@@ -68,7 +68,7 @@ class AlbumsController < ApplicationController
     @album = Album.find(params[:id])
 
     if @album
-      @description = @album.description.empty? ? "Description" : @album.description
+      @description = @album.description ? "Description" : @album.description
       @artist_names = ""
       @album.artists.each { |a| @artist_names += a.name + "," }
       # Remove trailing comma

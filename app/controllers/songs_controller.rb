@@ -76,7 +76,7 @@ class SongsController < ApplicationController
     @song = Song.find(params[:id])
 
     if @song
-      @description = @song.description.empty? ? "Description" : @song.description
+      @description = @song.description ? "Description" : @song.description
       @album_name = @song.album.name || "Album Name"
       @artist_names = ""
       @song.artists.each { |a| @artist_names += a.name + "," }
