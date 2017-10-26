@@ -43,8 +43,8 @@ class SongsController < ApplicationController
   end
 
   def create
-    additional_params = { artist_names: params[:artist_names],
-                          album_name: params[:album_name],
+    additional_params = { artist_names: params[:song][:artist_names] || params[:artist_names],
+                          album_name: params[:song][:album_name] || params[:album_name],
                           album_id: params[:album_id],
                           uploaded_file: params[:song][:song],
                           file_path: params[:song][:file_path],
