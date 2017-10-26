@@ -4,6 +4,9 @@
     <%= @song.artists.map {|a| a.name}.join ", " %>
   </p>
   <p class="list-group-item-text">
+    <%= @song.album.name %>
+  </p>
+  <p class="list-group-item-text">
     <%= @song.description %>
   </p>
   <p class="list-group-item-text">

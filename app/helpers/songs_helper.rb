@@ -28,7 +28,7 @@ module SongsHelper
     artists = params[:artists] || artists_from_params(params)
     if artists and albums
       if albums.class == Album
-        albums = nil unless albums.artists == artists
+        albums = nil unless albums.artists.each { |artist| artists.include?(artist) }
         albums = [].push(albums)
       else
         albums.select { |album| album.artists == artists }
