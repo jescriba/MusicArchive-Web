@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe SongsController do
-  
+
   describe "GET index" do
     it "assigns @songs" do
-      song = FactoryBot.create(:song)
+      artist = FactoryBot.create(:artist)
       get :index
-      expect(assigns(:songs)).to eq([song])
+      expect(assigns(:songs)).to eq(artist.songs)
     end
 
     it "renders the index template" do
@@ -17,9 +17,10 @@ describe SongsController do
 
   describe "GET #show" do
     it "renders the #show view" do
-      song = FactoryBot.create(:song)
-      get :index, { id: song.id }
-      response.should render_template :show
+      artist = FactoryBot.create(:artist)
+      song = artist.songs.first
+      get :show, params: { id: song.id }
+      expect(response).to render_template :show
     end
   end
 
