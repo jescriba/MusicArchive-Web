@@ -13,6 +13,9 @@
       <% else %>
         <%= link_to song.name, song_url(song), class: "list-group-item-heading" %>
       <% end %>
+      <p class="list-group-item-text">
+        by: <%= song.artist_names %>
+      </p>
     </div>
   <% end %>
 </div>

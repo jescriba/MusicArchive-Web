@@ -5,4 +5,15 @@ class Album < ApplicationRecord
 
   validates :name, uniqueness: true, presence: true
   validates :artist_albums, :length => { :minimum => 1 }
+
+  def artist_names
+    names = ""
+    self.artists.each do |artist|
+      names += "#{artist.name}, "
+    end
+
+    # Remove trailing ,
+    names.chomp!(", ")
+    return names
+  end
 end

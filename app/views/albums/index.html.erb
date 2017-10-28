@@ -13,6 +13,9 @@
       <% else %>
         <%= link_to album.name, album_url(album), class: "list-group-item-heading" %>
       <% end %>
+      <p class="list-group-item-text">
+        by: <%= album.artist_names %>
+      </p>
     </div>
   <% end %>
 </div>
