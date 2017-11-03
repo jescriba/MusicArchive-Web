@@ -126,6 +126,10 @@ body > .container {
   background-color: #FFEEF7;
 }
 
+.list-group-item-heading {
+  font-size: 20px;
+}
+
 .date-picker {
   margin: 5px;
 }
