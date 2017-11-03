@@ -108,6 +108,16 @@ body > .container {
  margin: 0 auto;
 }
 
+.song-link.list-group-item.active {
+  background-color: #5700a9;
+  border-color: #5700a9;
+}
+
+.song-link.list-group-item.active:hover {
+  background-color: #49028c;
+  border-color: #49028c;
+}
+
 .list-group-item.list-group-item-action {
  text-align: center;
 }

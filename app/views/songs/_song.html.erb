@@ -1,0 +1,16 @@
+<div class="list-group-item list-group-item-action song-link" id=<%= "#{song.id}"%>>
+  <% if local_assigns[:editing] %>
+    <%= link_to song.name, edit_song_url(song), class: "list-group-item-heading" %>
+  <% elsif local_assigns[:deleting] %>
+    <%= link_to song.name, song_url(song), method: 'delete',  class: "list-group-item-heading", data: { confirm: 'Are you sure?'} %>
+  <% else %>
+    <%= link_to song.name, song_url(song), class: "list-group-item-heading" %>
+  <% end %>
+  <p class="list-group-item-text">
+    by: <%= song.artist_names %>
+  </p>
+  <div class="song-details" style="display: none;" id=<%= "#{song.id}" %>>
+     <button type="button" class="btn btn-secondary download" >Download</button>
+     <button type="button" class="btn btn-secondary share">Share</button>
+  </div>
+</div>

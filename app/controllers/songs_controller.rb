@@ -17,7 +17,9 @@ class SongsController < ApplicationController
       @deleting = params[:deleting]
     end
 
+    gon.songs = @songs
     respond_to do |format|
+      format.js { render '_index.js.erb' }
       format.html { render :index }
       format.json { render :json => @songs.to_json(include: [:artists, :album]) }
     end

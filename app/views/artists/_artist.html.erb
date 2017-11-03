@@ -1,0 +1,9 @@
+<div class="list-group-item list-group-item-action artist-link" id=<%= "#{artist.id}"%>>
+  <% if local_assigns[:editing] %>
+    <%= link_to artist.name, edit_artist_url(artist), class: "list-group-item-heading" %>
+  <% elsif local_assigns[:deleting] %>
+    <%= link_to artist.name, artist_url(artist), method: 'delete',  class: "list-group-item-heading", data: { confirm: 'Are you sure?'} %>
+  <% else %>
+    <%= link_to artist.name, artist_url(artist), class: "list-group-item-heading" %>
+  <% end %>
+</div>

@@ -3,19 +3,8 @@
 <% elsif @deleting %>
 <h1> Select to Delete </h1>
 <% end %>
-<div class="list-group">
+<div class="list-group" id="song-list">
   <% @songs.each do |song| %>
-    <div class="list-group-item list-group-item-action song-link" id=<%= "#{song.id}"%>>
-      <% if @editing %>
-        <%= link_to song.name, edit_song_url(song), class: "list-group-item-heading" %>
-      <% elsif @deleting %>
-        <%= link_to song.name, song_url(song), method: 'delete',  class: "list-group-item-heading", data: { confirm: 'Are you sure?'} %>
-      <% else %>
-        <%= link_to song.name, song_url(song), class: "list-group-item-heading" %>
-      <% end %>
-      <p class="list-group-item-text">
-        by: <%= song.artist_names %>
-      </p>
-    </div>
+    <%= render song, editing: @editing, deleting: @deleting %>
   <% end %>
 </div>

@@ -1,0 +1,3 @@
+<% @songs.each do |song| %>
+  $("#song-list").append("<%= escape_javascript(render(:partial => song)) %>");
+<% end %>
