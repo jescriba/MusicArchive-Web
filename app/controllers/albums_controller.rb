@@ -24,6 +24,7 @@ class AlbumsController < ApplicationController
     respond_to do |format|
       if @album
         @songs = @album.songs
+        gon.songs = @songs
         format.html { render :show }
         format.json { render :json => @album.to_json(include: [:artists, :songs]) }
       else
