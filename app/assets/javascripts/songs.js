@@ -1,3 +1,7 @@
+var songsPage = 2;
+var currentSongIndex = 0;
+var currentSong;
+var audio = new Audio('');
 var ready = function() {
   $("#lossless-download").click(function(event) {
     event.preventDefault();
@@ -11,10 +15,13 @@ var ready = function() {
   });
 
   var isLoading = false;
-  var currentSong;
-  var songs = gon.songs;
-  var currentSongIndex = 0;
-  var page = 1;
+  var songs = [];
+  if (gon.songs != undefined) {
+    songs = gon.songs;
+  }
+  if (currentSong) {
+    updatePlayingState();
+  }
 
   function nextSong() {
     return songs[++currentSongIndex % songs.length];
@@ -25,13 +32,19 @@ var ready = function() {
   $(window).scroll(function() {
      if ($(window).scrollTop() + window.innerHeight > $(document).height() - 60 && !isLoading) {
        isLoading = true;
-       page += 1;
        $.ajax({
          headers: {
            Accept: "application/javascript"
          },
          type: "GET",
-         url: "songs?page=" + page
+         url: "songs?page=" + songsPage
+       }).done(function(data) {
+         isLoading = false;
+         // Prevent songsPage from incrementing when
+         // no songs were added
+         if (data != "" && $("#song-list").length != 0) {
+           songsPage += 1;
+         }
        });
      }
   });
@@ -68,18 +81,18 @@ var ready = function() {
     window.prompt("Copy direct link to song: Command+C, Enter", BASE_URL + "/songs/" + currentSong.id);
     event.stopPropagation();
   });
-  $("audio").on("ended", function() {
+  audio.onended = function() {
     updateSongDetails(nextSong());
-  });
-  $("audio").on("play", function() {
+  };
+  audio.onplay = function() {
     updatePlayingState();
-  });
-  $("audio").on("pause", function() {
+  };
+  audio.onpause = function() {
     updatePlayingState();
-  });
+  };
 
   function isPlaying() {
-    return !$("audio").get(0).paused;
+    return !audio.paused;
   }
 
   function updatePlayingState() {
@@ -93,11 +106,12 @@ var ready = function() {
   }
 
   function startPlaying() {
-    $("audio").get(0).play();
+    audio.setAttribute("src", currentSong.url);
+    audio.play();
   }
 
   function stopPlaying() {
-    $("audio").get(0).pause();
+    audio.pause();
   }
 
   function updateSongDetails(song) {
@@ -109,11 +123,10 @@ var ready = function() {
     $("div#" + song.id + ".song-details").show();
     $(".song-link").removeClass("active");
     $(".song-link#" + song.id).addClass("active");
-    $("audio").attr("src", song.url);
+    audio.setAttribute("src", song.url);
     $("#song-name").text(song.name);
     $("#download").show();
   }
 };
 
-$(document).ready(ready);
-$(document).on('page:change', ready);
+document.addEventListener("turbolinks:load", ready);
