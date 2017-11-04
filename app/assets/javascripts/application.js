@@ -13,7 +13,6 @@
 //= require rails-ujs
 //= require turbolinks
 //= require_tree .
-//= require songs
 
 // TODO More visible for customizing
 const BASE_URL="my-music-archive.com"
