@@ -31,6 +31,7 @@ class SongsController < ApplicationController
 
     respond_to do |format|
       if @song
+        gon.songs = [@song]
         format.html { render :show }
         format.json { render :json => @song.to_json(include: [:artists, :album]) }
       else

@@ -18,8 +18,14 @@ var ready = function() {
   var songs = [];
   if (gon.songs != undefined) {
     songs = gon.songs;
+    // Default to first song if no currentSong selected
+    if (!currentSong) {
+      currentSong = songs[0];
+      currentSongIndex = 0;
+    }
   }
   if (currentSong) {
+    updateSongDetails(currentSong);
     updatePlayingState();
   }
 
