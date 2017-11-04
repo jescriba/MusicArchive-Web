@@ -1,4 +1,4 @@
-$( window ).on('load', function() {
+var ready = function() {
   $("#lossless-download").click(function(event) {
     event.preventDefault();
     url = $(this).attr('song-url');
@@ -113,4 +113,7 @@ $( window ).on('load', function() {
     $("#song-name").text(song.name);
     $("#download").show();
   }
-});
+};
+
+$(document).ready(ready);
+$(document).on('page:change', ready);
