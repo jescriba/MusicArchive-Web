@@ -2,6 +2,7 @@ var songsPage = 2;
 var currentSongIndex = 0;
 var currentSong;
 var audio = new Audio('');
+audio.autoplay = 2;
 var ready = function() {
   $("#lossless-download").click(function(event) {
     event.preventDefault();
