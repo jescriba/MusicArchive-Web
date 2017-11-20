@@ -26,7 +26,7 @@ class AlbumsController < ApplicationController
         @songs = @album.songs
         gon.songs = @songs
         format.html { render :show }
-        format.json { render :json => @album.to_json(include: [:artists, :songs]) }
+        format.json { render :json => @album.to_json(include: [:artists, { songs: { include: :artists } }] ) }
       else
         format.html { render :status => 404 }
         format.json { render :json => [], :status => 404 }
