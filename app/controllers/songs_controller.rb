@@ -5,7 +5,11 @@ class SongsController < ApplicationController
   def index
     # # TODO Pagination
     search_params = params.permit(:album_id)
-    if search_params.empty?
+    if params[:artist_id]
+      # Handle /artists/:id/songs route
+      a = Artist.find params[:artist_id]
+      @songs = a.songs
+    elsif search_params.empty?
       @songs = Song.paginate(page: params[:page])
     else
       @songs = Song.find_by(search_params).paginate(page: params[:page])
