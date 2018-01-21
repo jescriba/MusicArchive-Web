@@ -34,6 +34,23 @@ class AlbumsController < ApplicationController
     end
   end
 
+  def download
+    # binding.pry
+    # @album = Album.find(params[:id])
+    #
+    # respond_to do |format|
+    #   if @album
+    #     @songs = @album.songs
+    #     gon.songs = @songs
+    #     format.html { render :show }
+    #     format.json { render :json => @album.to_json(include: [:artists, { songs: { include: :artists } }]) }
+    #   else
+    #     format.html { render :status => 404 }
+    #     format.json { render :json => [], :status => 404 }
+    #   end
+    # end
+  end
+
   def create
     additional_params = { artist_names: params[:album][:artist_names],
                           uploaded_files: params[:album][:album],
