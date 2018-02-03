@@ -22,4 +22,8 @@
       </div>
     <% end %>
   </div>
+  <% if @songs.count > 0 %>
+    <%= button_to "High Quality Download",  album_download_path(@album, quality: "high"), class: "btn btn-primary", id: "high-album-download" %>
+    <%= button_to "Low Quality Download",  album_download_path(@album, quality: "low"), class: "btn btn-primary", id: "low-album-download" %>
+  <% end %>
 </div>

@@ -1,5 +1,6 @@
 class SongsController < ApplicationController
   include SongsHelper
+  protect_from_forgery prepend: true
   before_action :admin_user, only: [:new, :create, :edit, :update, :destroy]
 
   def index

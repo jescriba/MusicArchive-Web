@@ -1,6 +1,8 @@
 require 'pry'
 
 class SessionsController < ApplicationController
+  protect_from_forgery prepend: true
+
   def index
     render :index
   end
