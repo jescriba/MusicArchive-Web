@@ -1,4 +1,8 @@
+require 'open-uri'
+
 class AlbumsController < ApplicationController
+  include ActionController::Streaming
+  include Zipline
   include AlbumsHelper
   include SongsHelper
   before_action :admin_user, only: [:new, :create, :edit, :update, :destroy]
@@ -35,20 +39,23 @@ class AlbumsController < ApplicationController
   end
 
   def download
-    # binding.pry
-    # @album = Album.find(params[:id])
-    #
-    # respond_to do |format|
-    #   if @album
-    #     @songs = @album.songs
-    #     gon.songs = @songs
-    #     format.html { render :show }
-    #     format.json { render :json => @album.to_json(include: [:artists, { songs: { include: :artists } }]) }
-    #   else
-    #     format.html { render :status => 404 }
-    #     format.json { render :json => [], :status => 404 }
-    #   end
-    # end
+    @album = Album.find(params[:album_id])
+
+    if @album
+      urls = []
+      quality = params[:quality]
+      @album.songs.select do |s|
+        url = quality == "high" ? (s.lossless_url || s.url) : (s.url)
+        urls.push([url, "#{@album.name}/#{s.name}#{File.extname(url)}"]) unless url.nil? || url.empty?
+      end
+      file_mappings = urls.lazy.map { |url, path| [open(url), path] }
+      zipline(file_mappings, "#{@album.name}.zip")
+    else
+      format.html { render :status => 404 and return }
+      ormat.json { render :json => [], :status => 404 and return }
+    end
+  ensure
+    response.stream.close
   end
 
   def create

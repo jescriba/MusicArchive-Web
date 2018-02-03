@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 
   resources :albums do
     resources :songs
-    get 'download'
+    post 'download'
   end
 
   resources :songs

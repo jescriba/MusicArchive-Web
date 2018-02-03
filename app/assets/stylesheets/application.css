@@ -138,3 +138,11 @@ body > .container {
   margin: 10px;
   max-width: 300px;
 }
+
+#high-album-download {
+  margin-left: 25px;
+}
+
+#low-album-download {
+  margin-left: 25px;
+}

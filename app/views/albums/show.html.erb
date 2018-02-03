@@ -22,10 +22,8 @@
       </div>
     <% end %>
   </div>
-  <button type="button" class="btn btn-primary" id="lossless-download">
-    High Quality Download
-  </button>
-  <button type="button" class="btn btn-primary" id="lossy-download">
-    Low Quality Download
-  </button>
+  <% if @songs.count > 0 %>
+    <%= button_to "High Quality Download",  album_download_path(@album, quality: "high"), class: "btn btn-primary", id: "high-album-download" %>
+    <%= button_to "Low Quality Download",  album_download_path(@album, quality: "low"), class: "btn btn-primary", id: "low-album-download" %>
+  <% end %>
 </div>
