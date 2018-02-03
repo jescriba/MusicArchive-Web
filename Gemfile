@@ -5,6 +5,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'nokogiri', '~> 1.8.1'
 gem 'zipline'
 # Gon for handling controller vars -> to js var
 gem 'gon'
