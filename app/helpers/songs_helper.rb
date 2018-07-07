@@ -49,7 +49,7 @@ module SongsHelper
 
   def recorded_date_from_params(params = {})
     recorded_date = params[:recorded_date]
-    return if recorded_date
+    return Date.parse(recorded_date) if recorded_date
 
     year = params["recorded_date(1i)"]
     month = params["recorded_date(2i)"]
