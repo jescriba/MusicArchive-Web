@@ -1,3 +1,5 @@
+require 'open-uri'
+
 module SongsHelper
   def artists_from_params(params = {})
     artist_names = params[:artist_names]
@@ -61,6 +63,11 @@ module SongsHelper
 
   def content_type_from_params(params)
     return params[:content_type] if params[:content_type]
+    if params[:remote_file_path]
+      type = StorageClient.content_type_from_extension(File.extname(params[:remote_file_path]))
+      puts "Content type: #{type} from remote file path determined"
+      return type
+    end
 
     begin
       tempfile = params[:song][:song]
@@ -72,9 +79,22 @@ module SongsHelper
   end
 
   def file_from_params(params = {})
+    if params[:remote_file_path]
+      path = download(params[:remote_file_path])
+      puts "Downloaded File at path: #{path} does not exist" unless File.exists?(path)
+      return File.new(path)
+    end
     return File.new(params[:file_path]) if params[:file_path]
     return nil unless params[:uploaded_file]
     return params[:uploaded_file].tempfile
+  end
+
+  def download(url)
+    puts "Attempt to download: #{url}"
+    path = "/tmp/#{url.hash}#{File.extname(url)}"
+    f = File.open(path, "w") { |f| IO.copy_stream(open(url), f) }
+    puts "Downloads to path: #{path} with #{f}"
+    return path
   end
 
   # { song: @song, file: file, content_type: content_type }

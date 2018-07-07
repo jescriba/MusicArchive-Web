@@ -56,17 +56,19 @@ class SongsController < ApplicationController
                           album_id: params[:album_id],
                           uploaded_file: params[:song][:song],
                           file_path: params[:song][:file_path],
+                          remote_file_path: params[:song][:remote_file_path],
                           content_type: content_type_from_params(params) }.compact
     current_params = song_params.merge(additional_params)
     current_params[:recorded_date] = recorded_date_from_params(current_params)
     album = album_from_params(current_params)
     artists = artists_from_params(current_params)
-    content_type = content_type_from_params(params)
+    content_type = content_type_from_params(current_params)
     file = file_from_params(current_params)
     # Remove params for constructing associations like album_name, artists_names
     song = Song.new(current_params.slice(:name, :description, :recorded_date))
     song.album = album
     song.artists << artists
+    puts "Saving params: #{current_params} in song: #{song} with album: #{album} and artists: #{artists} with file: #{file}"
 
     respond_to do |format|
       if song.save
