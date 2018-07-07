@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   end
 
   resources :songs
+  resources :playlists
 
   # Jobs UI
   mount Resque::Server, :at => "/resque"

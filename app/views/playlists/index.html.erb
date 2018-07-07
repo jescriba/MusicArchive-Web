@@ -1,0 +1,10 @@
+<% if @editing %>
+<h1> Select to Edit </h1>
+<% elsif @deleting %>
+<h1> Select to Delete </h1>
+<% end %>
+<div class="list-group" id="playlist-list">
+  <% @playlists.each do |playlist| %>
+    <%= render playlist, editing: @editing, deleting: @deleting %>
+  <% end %>
+</div>

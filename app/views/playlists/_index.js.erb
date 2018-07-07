@@ -1,0 +1,4 @@
+<% @playlists.each do |playlist| %>
+  gon.playlists.push(JSON.parse("<%= escape_javascript(playlist.to_json(include: [:songs]).html_safe) %>"))
+  $("#playlist-list").append("<%= escape_javascript(render(:partial => playlist)) %>");
+<% end %>

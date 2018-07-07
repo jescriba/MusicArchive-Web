@@ -1,0 +1,11 @@
+<div class="container">
+  <h1 class="text-center"><%= @playlist.name %></h1>
+  <p class="list-group-item-text">
+    <%= @playlist.description %>
+  </p>
+  <div class="list-group" id="song-list">
+    <% @songs.each do |song| %>
+      <%= render song, editing: @editing, deleting: @deleting %>
+    <% end %>
+  </div>
+</div>

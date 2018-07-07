@@ -1,0 +1,9 @@
+<script src='/scripts/dropzone.js' type='text/javascript'></script>
+<h2 class="form-signin-heading">New Playlist</h2>
+<%= form_for :playlist, as: :post, url: playlists_path do |f| %>
+  <%= f.text_field :name, placeholder: "Name", class: "form-control" %><br/>
+  <%= f.text_field :description, placeholder: "Description", class: "form-control" %><br/>
+  <p>Ordered comma separated song ids</p>
+  <%= f.text_field :song_ids, placeholder: "Song Ids", class: "form-control" %><br/>
+  <div id="submit"><%= f.submit "Create", class: "btn btn-lg btn-primary btn-block" %></div>
+<% end %>

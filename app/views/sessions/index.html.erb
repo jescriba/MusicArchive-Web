@@ -13,6 +13,12 @@
   <%= link_to 'Delete', albums_url(:deleting => true), class: "btn btn-primary", id: "delete-album" %>
 </div>
 <div class="manage-section">
+  <h5>Playlists</h5>
+  <%= link_to 'Create', new_playlist_url, class: "btn btn-primary", id: "create-playlist" %>
+  <%= link_to 'Update', playlists_url(:editing => true), class: "btn btn-primary", id: "update-playlist" %>
+  <%= link_to 'Delete', playlists_url(:deleting => true), class: "btn btn-primary", id: "delete-playlist" %>
+</div>
+<div class="manage-section">
   <h5>Artists</h5>
   <%= link_to 'Create', new_artist_url, class: "btn btn-primary", id: "create-artist" %>
   <%= link_to 'Update', artists_url(:editing => true), class: "btn btn-primary", id: "update-artist" %>

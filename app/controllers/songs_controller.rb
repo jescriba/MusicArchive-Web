@@ -169,8 +169,4 @@ class SongsController < ApplicationController
     def song_params
       params.require(:song).permit(:name, :description, :recorded_date)
     end
-
-    def admin_user
-      redirect_to(root_url) unless logged_in?
-    end
 end

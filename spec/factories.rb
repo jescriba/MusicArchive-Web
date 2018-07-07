@@ -1,4 +1,11 @@
 FactoryBot.define do
+  factory :playlist do
+    name "MyString"
+    description "MyText"
+  end
+  factory :playlist_song do
+    
+  end
 
   factory :album do
     sequence(:name) { |n| "Album #{n}" }

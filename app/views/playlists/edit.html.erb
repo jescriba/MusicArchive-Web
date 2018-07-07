@@ -1,0 +1,8 @@
+<h2 class="form-signin-heading">Edit Playlist</h2>
+<%= form_for @playlist do |f| %>
+  <%= f.text_field :name, placeholder: @playlist.name, class: "form-control" %><br/>
+  <%= f.text_field :description, placeholder: @playlist.description, class: "form-control" %><br/>
+  <p>Ordered comma separated song ids</p>
+  <%= f.text_field :song_ids, value: @song_ids, class: "form-control" %><br/>
+  <div id="submit"><%= f.submit "Update", class: "btn btn-lg btn-primary btn-block" %></div>
+<% end %>

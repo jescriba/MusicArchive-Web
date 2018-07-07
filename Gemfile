@@ -5,6 +5,10 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'loofah', '~> 2.2.1'
+gem 'rails-html-sanitizer', '~> 1.0.4'
+gem 'sinatra', '~> 2.0.2'
+gem 'sprockets', '~> 3.7.2'
 gem 'nokogiri', '~> 1.8.1'
 gem 'zipline'
 # Gon for handling controller vars -> to js var
