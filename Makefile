@@ -1,6 +1,7 @@
 bootstrap: .env
-	@brew tap heroku/brew && bin/brew_install.sh heroku postgresql
-	@gem install -v 2.0.2 bundler --minimal-deps --conservative
+	@brew tap heroku/brew && bin/brew_install.sh heroku postgresql rbenv
+	@rbenv install -s
+	@gem install -v 2.0.1 bundler --minimal-deps --conservative
 	@bundle install --quiet
 
 db: db_start
