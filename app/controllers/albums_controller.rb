@@ -8,8 +8,7 @@ class AlbumsController < ApplicationController
   before_action :admin_user, only: [:new, :create, :edit, :update, :destroy]
 
   def index
-    # TODO Pagination or search params
-    @albums = Album.paginate(page: params[:page])
+    @albums = Album.paginate(page: params[:page]).order(ordering_params(params)).all
 
     if logged_in?
       @editing = params[:editing]

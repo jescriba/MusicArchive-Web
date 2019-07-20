@@ -2,8 +2,7 @@ class ArtistsController < ApplicationController
   before_action :admin_user, only: [:new, :create, :edit, :update, :destroy]
 
   def index
-    # TODO Pagination
-    @artists = Artist.paginate(page: params[:page])
+    @artists = Artist.paginate(page: params[:page]).order(ordering_parmas(params)).all
 
     if logged_in?
       @editing = params[:editing]

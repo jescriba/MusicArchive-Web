@@ -1,19 +1,21 @@
 class SongsController < ApplicationController
   include SongsHelper
+  include Orderable
   protect_from_forgery prepend: true
   before_action :admin_user, only: [:new, :create, :edit, :update, :destroy]
 
   def index
-    # # TODO Pagination
+    ## API sort=-created_at,name
     search_params = params.permit(:album_id)
+    ordering_params = ordering_params(params)
     if params[:artist_id]
       # Handle /artists/:id/songs route
       a = Artist.find params[:artist_id]
-      @songs = a.songs
+      @songs = a.songs.order(ordering_params).all
     elsif search_params.empty?
-      @songs = Song.paginate(page: params[:page])
+      @songs = Song.paginate(page: params[:page]).order(ordering_params).all
     else
-      @songs = Song.find_by(search_params).paginate(page: params[:page])
+      @songs = Song.find_by(search_params).paginate(page: params[:page]).order(ordering_params).all
     end
     @songs = [].push(@songs) if @songs.class == Song
 
@@ -31,7 +33,6 @@ class SongsController < ApplicationController
   end
 
   def show
-    # TODO search params/pagination
     @song = Song.find(params[:id])
 
     respond_to do |format|

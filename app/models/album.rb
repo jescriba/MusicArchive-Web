@@ -6,6 +6,8 @@ class Album < ApplicationRecord
   validates :name, uniqueness: true, presence: true
   validates :artist_albums, :length => { :minimum => 1 }
 
+  #Album(id: integer, name: string, description: text, release_date: date, created_at: datetime, updated_at: datetime)
+
   def artist_names
     names = ""
     self.artists.each do |artist|

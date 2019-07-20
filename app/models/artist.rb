@@ -8,6 +8,8 @@ class Artist < ApplicationRecord
 
   after_save :add_to_default_album
 
+  #Artist(id: integer, name: string, description: text, created_at: datetime, updated_at: datetime)
+
   private
   def add_to_default_album
     album = Album.first || Album.new(name: "Uncategorized")

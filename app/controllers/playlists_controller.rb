@@ -3,7 +3,7 @@ class PlaylistsController < ApplicationController
   before_action :admin_user, only: [:new, :create, :edit, :update, :destroy]
 
   def index
-    @playlists = Playlist.all
+    @playlists = Playlist.paginate(page: params[:page]).order(order_params).all
 
     if logged_in?
       @editing = params[:editing]

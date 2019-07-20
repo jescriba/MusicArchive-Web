@@ -8,6 +8,8 @@ class Song < ApplicationRecord
   validates :name, uniqueness: true, presence: true
   validates :artist_songs, :length => { :minimum => 1 }
 
+  # Song(id: integer, name: string, description: text, url: text, lossless_url: text, recorded_date: date, album_id: integer, artist_songs_id: integer, created_at: datetime, updated_at: datetime, album_track_order: integer, playlist_song_id: integer)
+
   def artist_names
     names = ""
     self.artists.each do |artist|
