@@ -18,6 +18,12 @@ module Orderable
         end
       end
     end
+
+    # default order of created_at desc unless otherwise specified..
+    unless ordering.include?("created_at")
+      ordering["created_at"] = :desc
+    end
+
     return ordering
   end
 end
