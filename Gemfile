@@ -5,11 +5,14 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'loofah', '~> 2.2.1'
+gem "rack", ">= 2.0.6"
+gem "actionview", ">= 5.1.6.2"
+gem "rubyzip", ">= 1.2.2"
+gem "nokogiri", ">= 1.8.5"
+gem "loofah", ">= 2.2.3"
 gem 'rails-html-sanitizer', '~> 1.0.4'
 gem 'sinatra', '~> 2.0.2'
 gem 'sprockets', '~> 3.7.2'
-gem 'nokogiri', '~> 1.8.1'
 gem 'zipline'
 # Gon for handling controller vars -> to js var
 gem 'gon'

@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :playlist do
-    name "MyString"
-    description "MyText"
+    name { "MyString" }
+    description { "MyText" }
   end
   factory :playlist_song do
     
@@ -9,23 +9,23 @@ FactoryBot.define do
 
   factory :album do
     sequence(:name) { |n| "Album #{n}" }
-    description "Lorem ipsum"
-    release_date Date.new
+    description { "Lorem ipsum" }
+    release_date { Date.new }
   end
 
   factory :song do
     sequence(:name) { |n| "Song #{n}" }
-    description "Lorem ipsum"
-    recorded_date Date.new
+    description { "Lorem ipsum" }
+    recorded_date { Date.new }
   end
 
   factory :artist do
     sequence(:name) { |n| "Artist #{n}" }
-    description "Lorem ipsum"
+    description { "Lorem ipsum" }
 
     transient do
-      albums_count 2
-      songs_count 10
+      albums_count { 2 }
+      songs_count { 10 }
     end
 
     after(:create) do |artist, evaluator|

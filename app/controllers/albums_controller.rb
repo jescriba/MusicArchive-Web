@@ -5,6 +5,7 @@ class AlbumsController < ApplicationController
   include Zipline
   include AlbumsHelper
   include SongsHelper
+  include Orderable
   before_action :admin_user, only: [:new, :create, :edit, :update, :destroy]
 
   def index

@@ -1,8 +1,9 @@
 class ArtistsController < ApplicationController
+  include Orderable
   before_action :admin_user, only: [:new, :create, :edit, :update, :destroy]
 
   def index
-    @artists = Artist.paginate(page: params[:page]).order(ordering_parmas(params)).all
+    @artists = Artist.paginate(page: params[:page]).order(ordering_params(params)).all
 
     if logged_in?
       @editing = params[:editing]
