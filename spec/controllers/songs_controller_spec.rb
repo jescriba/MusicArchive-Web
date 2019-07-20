@@ -6,7 +6,7 @@ describe SongsController do
     it "assigns @songs" do
       artist = FactoryBot.create(:artist)
       get :index
-      expect(assigns(:songs)).to eq(artist.songs)
+      expect(assigns(:songs).sort { |s1, s2| s1.name <=> s2.name }).to eq(artist.songs.sort { |s1, s2| s1.name <=> s2.name })
     end
 
     it "renders the index template" do
