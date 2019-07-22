@@ -6,6 +6,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem "has_scope"
 gem "rack", ">= 2.0.6"
 gem "actionview", ">= 5.1.6.2"
 gem "rubyzip", ">= 1.2.2"

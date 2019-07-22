@@ -1,9 +1,16 @@
 class ArtistsController < ApplicationController
   include Orderable
   before_action :admin_user, only: [:new, :create, :edit, :update, :destroy]
+  has_scope :by_name, only: :index
+  has_scope :by_description, only: :index
+  has_scope :by_created_at, using: [:from, :to], only: :index
+  has_scope :by_updated_at, using: [:from, :to], only: :index
 
   def index
-    @artists = Artist.paginate(page: params[:page]).order(ordering_params(params)).all
+    @artists = apply_scopes(Artist)
+               .paginate(page: params[:page])
+               .order(ordering_params(params))
+               .all
 
     if logged_in?
       @editing = params[:editing]

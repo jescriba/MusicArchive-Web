@@ -3,19 +3,34 @@ class SongsController < ApplicationController
   include Orderable
   protect_from_forgery prepend: true
   before_action :admin_user, only: [:new, :create, :edit, :update, :destroy]
+  has_scope :by_name, only: :index
+  has_scope :by_description, only: :index
+  has_scope :by_created_at, using: [:from, :to], only: :index
+  has_scope :by_updated_at, using: [:from, :to], only: :index
+  has_scope :by_recorded_date, using: [:from, :to], only: :index
 
   def index
     ## API sort=-created_at,name
+    ## API filter by_name=something&by_description=something&by_recorded_date[from]=yyyy-mm-dd&by_recorded_date[to]=yyyy-mm-dd
     search_params = params.permit(:album_id)
     ordering_params = ordering_params(params)
     if params[:artist_id]
       # Handle /artists/:id/songs route
       a = Artist.find params[:artist_id]
-      @songs = a.songs.order(ordering_params).all
+      @songs = a.songs
+                .order(ordering_params)
+                .all
     elsif search_params.empty?
-      @songs = Song.paginate(page: params[:page]).order(ordering_params).all
+      @songs = apply_scopes(Song)
+                   .paginate(page: params[:page])
+                   .order(ordering_params)
+                   .all
     else
-      @songs = Song.find_by(search_params).paginate(page: params[:page]).order(ordering_params).all
+      @songs = apply_scopes(Song)
+                   .find_by(search_params)
+                   .paginate(page: params[:page])
+                   .order(ordering_params)
+                   .all
     end
     @songs = [].push(@songs) if @songs.class == Song
 
