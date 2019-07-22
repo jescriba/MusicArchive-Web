@@ -3,6 +3,7 @@ var currentSongIndex = 0;
 var currentSong;
 var audio = new Audio('');
 audio.autoplay = 2;
+function mSet(){audio.currentTime=dur.value}
 var ready = function() {
   $("#lossless-download").click(function(event) {
     event.preventDefault();
@@ -97,6 +98,12 @@ var ready = function() {
   audio.onpause = function() {
     updatePlayingState();
   };
+  audio.onloadedmetadata = function() {
+    mDur();
+  };
+  audio.ontimeupdate = function() {
+    mPlay();
+  }
 
   function isPlaying() {
     return !audio.paused;
@@ -134,6 +141,11 @@ var ready = function() {
     $("#song-name").text(song.name);
     $("#download").show();
   }
+
+// Lifted from: https://codepen.io/pksml/pen/xVNwJa
+  var dur= document.getElementById('dur')
+  function mDur(){dur.max= audio.duration}
+  function mPlay(){dur.value=audio.currentTime}
 };
 
 document.addEventListener("turbolinks:load", ready);
