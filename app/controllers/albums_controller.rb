@@ -139,7 +139,7 @@ class AlbumsController < ApplicationController
       @album.artists = artists if artists
       ## Create songs for album if uploaded files exist
       if file_names
-        songs = create_songs_from_files_and_artists(file_names, artists)
+        songs = create_songs_from_file_names_and_artists(file_names, artists)
         @album.songs << songs
       end
 
